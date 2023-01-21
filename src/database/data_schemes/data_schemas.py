@@ -13,6 +13,7 @@ class Expenses(Base):
     cost = Column(Integer)
     disc = Column(String(100))
     date = Column(Date)
+    category = Column(String(20))
 
 class Users(Base):
 

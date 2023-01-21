@@ -1,29 +1,48 @@
-from fastapi import APIRouter
+from datetime import datetime, date, timedelta
 
-from src import database
-from src.apps.cost_controll_app.schemas.schemas import ExpensesModel, ExpensesReturnModel, GetExpenses
-from src.database.data_schemes.work_with_db import engine, session
+from fastapi import APIRouter, Depends, Query
+from src.depends.auth.auth_service import get_current_user
+from datetime import date
+from src.apps.cost_controll_app.schemas.schemas import ExpensesModel, ExpensesReturnModel, GetExpenses, User, \
+    ExpensDBModel, GetExpensesList, GetExpenses
+from src.database.data_schemes.work_with_db import engine, get_session
 from src.database.data_schemes.data_schemas import Expenses
-from datetime import date, datetime
+from sqlalchemy.orm import Session
 
 
 cost_control_router = APIRouter()
 
 
 @cost_control_router.post("/expenses", response_model=ExpensesReturnModel)
-async def add_expenses(expenses: ExpensesModel):
-    exp = Expenses(**dict(expenses))
+async def add_expenses(expenses: ExpensesModel, current_user: User = Depends(get_current_user),
+                       session: Session = Depends(get_session)
+                       ):
+    expens_to_db = ExpensDBModel(**dict(expenses), user_id=current_user.user_id)
+    exp = Expenses(**dict(expens_to_db))
     session.add(exp)
     session.commit()
     return {"status" : "Record added to database"}
 
-@cost_control_router.get("/expenses")
-async def get_expenses(got_expenses:  GetExpenses):
-    q = session.query(Expenses).where(
-        Expenses.user_id == got_expenses.user_id and
-        got_expenses.date_start < Expenses.date < got_expenses.date_stop
-    )[got_expenses.pagination_start:got_expenses.pagination_stop]
+
+@cost_control_router.get("/expenses", response_model=GetExpensesList)
+async def get_expenses(pagination_start: int = Query(ge=0, default=0),
+                       pagination_step: int = Query(ge=10, lt=100, default=10), current_user = Depends(get_current_user),
+                       time_delta_days: int = Query(gt=0, default=30), session: Session = Depends(get_session)):
+    q = session.query(Expenses.cost, Expenses.date, Expenses.disc, Expenses.category, Expenses.operation_id).where(
+        Expenses.user_id == current_user.user_id and datetime.today() - timedelta(days=time_delta_days)
+        <= datetime.date(Expenses.date) <= datetime.today()
+    ).all()
+    session.close()
+    expenses = list()
     for i in q:
-        print(q)
+        expenses.append({"cost": i[0], "date": i[1], "disc": i[2], "category": i[3], "operation_id": i[4]})
+    return {"exp_list": expenses}
+
+
+
+
+
+
+
 
 

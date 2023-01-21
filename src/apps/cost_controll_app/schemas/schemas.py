@@ -1,11 +1,22 @@
 from datetime import date
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List
+from enum import Enum
+from fastapi import Query
+
+
+class CategoryModel(str, Enum):
+    food = "food"
+    other = "other"
+
 
 class ExpensesModel(BaseModel):
     cost: int
     disc: str
+    category: CategoryModel
     date: date
+
+class ExpensDBModel(ExpensesModel):
     user_id: int
 
 
@@ -13,18 +24,14 @@ class ExpensesReturnModel(BaseModel):
     status: str = "Ok"
 
 
-class GetExpenses(BaseModel):
-    user_id: int
-    pagination_start: int = 0
-    pagination_stop: int = 10
-    date_start: date
-    date_stop: date
+class GetExpenses(ExpensesModel):
+    operation_id: str
 
 
+class GetExpensesList(BaseModel):
+    exp_list: List[GetExpenses]
 
-class ReturnListExpensisModel(BaseModel):
-    summary_cost: int | None
-    date: date | List[date]
+
 
 
 class BaseUser(BaseModel):

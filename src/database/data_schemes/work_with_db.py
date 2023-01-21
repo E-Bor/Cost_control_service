@@ -10,5 +10,8 @@ session = Session(bind=engine)
 # session = Session()
 
 def get_session() -> Session:
-    return session
+    try:
+        yield session
+    finally:
+        session.close()
 
