@@ -39,8 +39,32 @@ async def get_expenses(pagination_start: int = Query(ge=0, default=0),
     return {"exp_list": expenses}
 
 
+@cost_control_router.put("/expenses", response_model=GetExpenses)
+async def change_expense(
+        expense: GetExpenses,
+        current_user: User = Depends(get_current_user),
+        session: Session = Depends(get_session)
+):
+
+    upd_expense = ExpensDBModel(**dict(expense), user_id=current_user.user_id)
+    q = session.query(Expenses).where(Expenses.user_id == current_user.user_id)\
+        .where(Expenses.operation_id == expense.operation_id).update(dict(upd_expense))
+    session.commit()
+    session.close()
+    return expense
 
 
+@cost_control_router.delete("/expenses", response_model=ExpensesReturnModel)
+async def delete_expense(
+        operation_id: str,
+        current_user = Depends(get_current_user),
+        session: Session = Depends(get_session)
+):
+    q = session.query(Expenses).where(Expenses.user_id == current_user.user_id)\
+        .where(Expenses.operation_id == operation_id).delete()
+    session.commit()
+    session.close()
+    return {"status" : "Record deleted from database"}
 
 
 
