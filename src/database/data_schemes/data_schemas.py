@@ -23,3 +23,12 @@ class Users(Base):
     user_name = Column(String(25))
     user_hashed_pass = Column(String)
     user_email = Column(String(25))
+
+
+class Earnings(Base):
+
+    __tablename__ = "earnings"
+    user_id = Column(Integer)
+    earning_id = Column(Integer, primary_key=True)
+    earning_value = Column(Integer)
+    date = Column(Date)

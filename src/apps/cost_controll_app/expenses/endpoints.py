@@ -1,10 +1,10 @@
 from datetime import datetime, date, timedelta
-from fastapi import Cookie
+
 from fastapi import APIRouter, Depends, Query
 from src.depends.auth.auth_service import get_current_user
 from datetime import date
-from src.apps.cost_controll_app.schemas.schemas import ExpensesModel, ExpensesReturnModel, GetExpenses, User, \
-    ExpensDBModel, GetExpensesList, GetExpenses
+from src.apps.cost_controll_app.schemas.schemas import ExpensesModel, ExpensesReturnModel, GetExpensesModel, User, \
+    ExpensDBModel, GetExpensesListModel, GetExpensesModel
 from src.database.data_schemes.work_with_db import engine, get_session
 from src.database.data_schemes.data_schemas import Expenses
 from sqlalchemy.orm import Session
@@ -24,7 +24,7 @@ async def add_expenses(expenses: ExpensesModel, current_user: User = Depends(get
     return {"status" : "Record added to database"}
 
 
-@cost_control_router.get("/expenses", response_model=GetExpensesList)
+@cost_control_router.get("/expenses", response_model=GetExpensesListModel)
 async def get_expenses(pagination_start: int = Query(ge=0, default=0),
                        pagination_step: int = Query(ge=10, lt=100, default=10), current_user = Depends(get_current_user),
                        time_delta_days: int = Query(gt=0, default=30), session: Session = Depends(get_session)):
@@ -39,9 +39,9 @@ async def get_expenses(pagination_start: int = Query(ge=0, default=0),
     return {"exp_list": expenses}
 
 
-@cost_control_router.put("/expenses", response_model=GetExpenses)
+@cost_control_router.put("/expenses", response_model=GetExpensesModel)
 async def change_expense(
-        expense: GetExpenses,
+        expense: GetExpensesModel,
         current_user: User = Depends(get_current_user),
         session: Session = Depends(get_session)
 ):
