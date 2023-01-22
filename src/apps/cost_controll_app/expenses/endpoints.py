@@ -1,5 +1,5 @@
 from datetime import datetime, date, timedelta
-
+from fastapi import Cookie
 from fastapi import APIRouter, Depends, Query
 from src.depends.auth.auth_service import get_current_user
 from datetime import date
@@ -15,7 +15,7 @@ cost_control_router = APIRouter()
 
 @cost_control_router.post("/expenses", response_model=ExpensesReturnModel)
 async def add_expenses(expenses: ExpensesModel, current_user: User = Depends(get_current_user),
-                       session: Session = Depends(get_session)
+                       session: Session = Depends(get_session),
                        ):
     expens_to_db = ExpensDBModel(**dict(expenses), user_id=current_user.user_id)
     exp = Expenses(**dict(expens_to_db))
