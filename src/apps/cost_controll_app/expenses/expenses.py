@@ -31,7 +31,7 @@ async def get_expenses(pagination_start: int = Query(ge=0, default=0),
     q = session.query(Expenses.cost, Expenses.date, Expenses.disc, Expenses.category, Expenses.operation_id).where(
         Expenses.user_id == current_user.user_id and datetime.today() - timedelta(days=time_delta_days)
         <= datetime.date(Expenses.date) <= datetime.today()
-    ).all()
+    )[pagination_start:pagination_start+pagination_step]
     session.close()
     expenses = list()
     for i in q:

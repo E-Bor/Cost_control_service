@@ -98,7 +98,7 @@ class AuthService:
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/signin", auto_error=False)
 
 
-def chose_cookie_or_token(cookie_token=Cookie(default=None), token = Depends(oauth2_scheme)):
+def chose_cookie_or_token(cookie_token=Cookie(default=None), token=Depends(oauth2_scheme)):
 
     if cookie_token:
         return cookie_token
