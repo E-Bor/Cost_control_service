@@ -47,7 +47,8 @@ class MassOperations:
             "path": os.path.abspath(f"{user_id}_data.zip"),
             "filename": f"{user_id}_data.zip"
         }
-        files_to_delete = [os.remove(os.path.abspath(_)) for _ in files]
+        for _ in files:
+            os.remove(os.path.abspath(_))
         return file_data
 
 
