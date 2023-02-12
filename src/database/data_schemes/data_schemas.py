@@ -1,10 +1,11 @@
-import sqlalchemy as sa
-from sqlalchemy import MetaData, Table, Column, Integer, String, Date
-from src.database.data_schemes.work_with_db import engine
+from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import declarative_base
 
+# class constructor initialization
 Base = declarative_base()
 
+
+# expenses table schema
 class Expenses(Base):
 
     __tablename__ = "expens"
@@ -15,6 +16,8 @@ class Expenses(Base):
     date = Column(Date)
     category = Column(String(20))
 
+
+# user table schema
 class Users(Base):
 
     __tablename__ = "users"
@@ -25,6 +28,7 @@ class Users(Base):
     user_email = Column(String(25))
 
 
+# earnings table schema
 class Earnings(Base):
 
     __tablename__ = "earnings"

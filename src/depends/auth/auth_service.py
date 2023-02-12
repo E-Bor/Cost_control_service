@@ -10,18 +10,19 @@ from starlette.status import HTTP_401_UNAUTHORIZED
 
 from src.database.data_schemes.work_with_db import engine, get_session
 from src.settings import jwt_secret, jwt_algoritm, jwt_expiration
-from src.apps.cost_controll_app.schemas.schemas import User, Token, UserCreate  #pydantic schema
-from src.database.data_schemes.work_with_db import session
-from src.database.data_schemes.data_schemas import Users    #orm schema
+from src.apps.cost_controll_app.schemas.schemas import User, Token, UserCreate  #pydantic schemas
+from src.database.data_schemes.data_schemas import Users    #orm schemas
 from fastapi.security import OAuth2PasswordBearer
 
 
 class AuthService:
 
+    # pass verification
     @classmethod
     def verify_password(cls, plain_password: str, hashed_password: str) -> bool:
         return bcrypt.verify(plain_password, hashed_password)
 
+    # hashing pass
     @classmethod
     def hash_password(cls, password: str) -> str:
         return bcrypt.hash(password)
@@ -49,7 +50,6 @@ class AuthService:
 
     @classmethod
     def create_token(cls, user: Users) -> Token:
-        print(user, "user-token-created")
         user_data = User.from_orm(user)
         payload = {
             "iat": datetime.utcnow(),
@@ -62,7 +62,7 @@ class AuthService:
         return Token(access_token=token)
 
     def __init__(self, session: Session = Depends(get_session)):
-        self.session = session
+        self.session = session    # Getting database session
 
     def register_new_user(self, user_data: UserCreate, response: Response) -> Token:
         user = Users(
@@ -114,17 +114,3 @@ def chose_cookie_or_token(cookie_token=Cookie(default=None), token=Depends(oauth
 
 def get_current_user(token: str = Depends(chose_cookie_or_token)) -> User:
     return AuthService.validate_token(token)
-
-
-
-# def get_current_user(token: str = Depends(oauth2_scheme), cookie_token=Cookie(default=None)) -> User:
-#     # print(cookie_token, flush=True)
-#     # print("!!!!!!!", flush=True)
-#     print(cookie_token)
-#     if cookie_token:
-#         A = AuthService.validate_token(cookie_token)
-#         print(A, "bool")
-#         return A
-#
-#     return AuthService.validate_token(token)
-
