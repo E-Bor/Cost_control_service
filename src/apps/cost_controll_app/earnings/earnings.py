@@ -57,7 +57,6 @@ async def edit_earnings(
     return earning
 
 
-
 @earnings_control_router.delete("/earnings")
 async def delete_earning(
         earning_id: str,
