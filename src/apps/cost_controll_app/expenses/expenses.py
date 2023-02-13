@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 cost_control_router = APIRouter()
 
 
-# getting info about expenses in time interval
+# add expenses with info to database
 @cost_control_router.post("/expenses", response_model=ExpensesReturnModel, tags=["Expenses"])
 async def add_expenses(expenses: ExpensesModel, current_user: User = Depends(get_current_user),
                        session: Session = Depends(get_session),
@@ -25,7 +25,7 @@ async def add_expenses(expenses: ExpensesModel, current_user: User = Depends(get
     return {"status": "Record added to database"}
 
 
-# add expenses with info to database
+# getting info about expenses in time interval
 @cost_control_router.get("/expenses", response_model=GetExpensesListModel, tags=["Expenses"])
 async def get_expenses(pagination_start: int = Query(ge=0, default=0),
                        pagination_step: int = Query(ge=10, lt=100, default=10),

@@ -1,10 +1,12 @@
 import csv
 import os.path
 import zipfile
+from datetime import datetime
 
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
+from src.apps.cost_controll_app.schemas.schemas import User
 from src.database.data_schemes.data_schemas import Expenses, Earnings
 from src.database.data_schemes.work_with_db import get_session
 
@@ -51,25 +53,54 @@ class MassOperations:
             os.remove(os.path.abspath(_))
         return file_data
 
+    def unpack_zip(self, file_name: str) -> list[str]:
+        path = os.path.dirname(__file__) + "/uploaded_files/"
+        extracted_files = []
+        with zipfile.ZipFile(path + file_name) as user_zip:
+            user_zip.extractall(path)
+            for i in user_zip.namelist():
+                if ".csv" in i:
+                    extracted_files.append(path + i)
+        os.remove(path + file_name)
+        return extracted_files
 
 
-    def read_csv(self, file_name) -> list:
-        with open(f"{file_name}", "r") as csv_file:
+    def read_csv(self, path) -> list[list]:
+        with open(path, "r") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             list_with_data = [list(i) for i in csv_reader]
-            return list_with_data
+        return list_with_data
 
-    def add_data_list_to_db_expenses(self, data_list: list) -> None:
-        data_objs = [Expenses(user_id=i[0], operation_id=i[1], cost=i[2], disc=i[3], date=i[4], category=i[5])
+
+    def add_data_list_to_db_expenses(self, user: User, data_list: list) -> None:
+        data_objs = [Expenses(user_id=user.user_id, operation_id=i[0], cost=i[1], disc=i[2],
+                              date=datetime.strptime(i[3], "%Y-%m-%d"),
+                              category=i[4])
                      for i in data_list]
-        self.session.add(data_objs)
+        self.session.add_all(data_objs)
         self.session.commit()
         self.session.close()
 
-    def add_data_list_to_db_earnings(self, data_list: list, session: Session) -> None:
-        data_objs = [Earnings(user_id=i[0], earning_id=i[1], earning_value=i[2], date=i[3])
+    def add_data_list_to_db_earnings(self, user: User, data_list: list) -> None:
+        data_objs = [Earnings(user_id=user.user_id, earning_id=i[0], earning_value=i[1],
+                              date=datetime.strptime(i[2], "%Y-%m-%d"))
                      for i in data_list]
-        self.session.add(data_objs)
+        self.session.add_all(data_objs)
         self.session.commit()
         self.session.close()
 
+    def extract_data_to_db(self, filename: str, user: User):
+        unpacked_csv_paths = self.unpack_zip(filename)
+        for i in unpacked_csv_paths:
+            if f"{user.user_id}_earnings.csv" in i:
+
+                self.add_data_list_to_db_earnings(
+                    user,
+                    self.read_csv(i)
+                )
+            if f"{user.user_id}_expenses.csv" in i:
+
+                self.add_data_list_to_db_expenses(
+                    user,
+                    self.read_csv(i)
+                )
