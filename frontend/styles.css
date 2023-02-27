@@ -1,0 +1,99 @@
+body {
+    background-color: #212529e1;
+    }
+
+
+.nav-link{
+    color: rgb(172, 141, 6);
+    
+}
+.nav-link:hover {
+    color: rgb(161, 156, 131);
+    background-color: rgb(49, 49, 49);
+    
+}
+
+.navbar-nav .nav-link.active {
+    color:rgb(248, 213, 14);
+
+}
+.nav-item.dropdown{
+    color: rgb(172, 141, 6);
+    
+}
+.container-fluid .navbar-brand  {
+    color:rgb(248, 213, 14);
+    font-family: 'Gajraj One', cursive;
+    font-size: 2em;
+    padding: 0;
+    
+}
+
+.navbar.navbar-expand-md.bg-dark .dropdown-menu.position-absolute{
+    background-color: #212529;
+    border: 0;
+    padding: 0.5;
+       
+}
+.navbar.navbar-expand-md.bg-dark .dropdown-menu.position-absolute .dropdown-item {
+    color: rgb(172, 141, 6);
+}
+.navbar.navbar-expand-md.bg-dark .dropdown-menu.position-absolute .dropdown-item:hover{
+    color: rgb(161, 156, 131);
+    background-color: rgb(49, 49, 49);
+}
+section>.text-center {
+    
+    color:rgb(248, 213, 14);
+
+}
+section>.text-center .col-lg-4, section>.text-center .col-lg-8{
+    padding: 1em;
+}
+
+section>.text-center input, section>.text-center input:focus{
+    color: rgb(49, 49, 49);
+    background-color: #8a8b8d;
+    border-color: rgb(172, 141, 6);
+    
+}
+section>.text-center textarea, section>.text-center textarea:focus{
+    color: rgb(49, 49, 49);
+    background-color: #8a8b8d;
+    border-color: rgb(172, 141, 6);
+    
+}
+
+
+section>.text-center select, section>.text-center select:focus{
+    color: rgb(49, 49, 49);
+    background-color: #8a8b8d;
+    border-color: rgb(172, 141, 6);
+    
+}
+section>.text-center .btn.btn-primary {
+    background-color: rgb(172, 141, 6);
+    border: 0;
+}
+section>.text-center .btn.btn-primary:hover {
+    background-color: rgb(190, 129, 16);
+}
+
+section>.text-center select:fo{
+    color: rgb(49, 49, 49);
+    background-color: #8a8b8d;
+    border-color: rgb(172, 141, 6);
+    
+}
+.table{
+    border-color:  rgb(172, 141, 6);
+    margin-top: 1em;
+    }
+
+.table thead{
+    color: rgb(248, 213, 14);
+}
+.table tbody{
+    color:rgb(172, 141, 6)
+}
+
