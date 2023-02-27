@@ -42,6 +42,7 @@ async def get_expenses(pagination_start: int = Query(ge=0, default=0),
     return {"exp_list": expenses}
 
 
+
 # edit expenses note
 @cost_control_router.put("/expenses", response_model=GetExpensesModel, tags=["Expenses"])
 async def change_expense(

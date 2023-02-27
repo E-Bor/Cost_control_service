@@ -21,7 +21,7 @@ class Expenses(Base):
 class Users(Base):
 
     __tablename__ = "users"
-
+    
     user_id = Column(Integer, primary_key=True)
     user_name = Column(String(25))
     user_hashed_pass = Column(String)
