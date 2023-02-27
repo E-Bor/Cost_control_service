@@ -54,16 +54,16 @@
                     <form class="row g-1">
                         <div class="col-md-6">
                             <label for="inputEmail4" class="form-label">Дата</label>
-                            <input type="date" class="form-control" id="inputEmail4" placeholder="Год-месяц-день">
+                            <input name="date" type="date" class="form-control" id="inputEmail4" placeholder="Год-месяц-день">
 
                         </div>
-                        
+
                         <div class="col-md-5">
                             <label for="inputZip" class="form-label">Заработок</label>
-                            <input type="text" class="form-control" id="inputZip">
+                            <input name="cost" type="text" class="form-control" id="inputZip">
                         </div>
                         <div class="row g-1">
-                            <button type="submit" class="btn btn-primary">Добавить запись</button>
+                            <button name="earningsButton" type="submit" class="btn btn-primary">Добавить запись</button>
                         </div>
                     </form>
                 </div>
@@ -118,7 +118,7 @@
     <footer>
 
     </footer>
-
+    <script src="earnings.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
