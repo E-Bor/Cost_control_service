@@ -1,0 +1,28 @@
+
+body {
+    background-color: #212529e1;
+    }
+
+.auth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.auth>form {
+    color: rgb(172, 141, 6);
+}
+
+.form-control, .form-control:focus {
+    background-color: #8a8b8d;
+    border: 0;
+}
+
+.btn.btn-primary{
+    background-color: rgb(172, 141, 6);
+    border: 0;
+}
+.btn.btn-primary:hover {
+    background-color: rgb(190, 129, 16);
+}
